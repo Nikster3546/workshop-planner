@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# PyCharm
+.idea/
+
+# Переменные окружения
+.env
+
+# Alembic
+alembic/__pycache__/
