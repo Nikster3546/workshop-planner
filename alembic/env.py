@@ -21,7 +21,7 @@ if config.config_file_name is not None:
 import os
 from dotenv import load_dotenv
 from app.models.db import Base
-from app.models import route, step, order, worker, equipment, schedule  # noqa
+from app.models import route, step, order, worker, equipment, schedule, user  # noqa
 
 load_dotenv()
 
