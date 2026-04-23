@@ -17,11 +17,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-#app.include_router(orders.router)
-#app.include_router(routes.router)
-#app.include_router(workers.router)
-#app.include_router(equip_router.router)
-#app.include_router(sched_router.router)
+app.include_router(orders.router)
+app.include_router(routes.router)
+app.include_router(workers.router)
+app.include_router(equip_router.router)
+app.include_router(sched_router.router)
 
 @app.get("/")
 def root():
