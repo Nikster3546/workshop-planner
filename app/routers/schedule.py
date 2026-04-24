@@ -14,6 +14,9 @@ def get_schedule(db: Session = Depends(get_db)):
 
 @router.post("/run", response_model=ScheduleRunResult)
 def run_schedule(data: ScheduleRunRequest, db: Session = Depends(get_db)):
+    # Сначала очищаем старое расписание
+    schedule_repo.clear_all(db)
+    # Затем запускаем алгоритм
     result = run_scheduler(db)
     return ScheduleRunResult(
         created=result["created"],

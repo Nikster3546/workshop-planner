@@ -8,6 +8,7 @@ from app.models.schedule import Schedule
 WORK_START_HOUR = 8   # начало смены
 WORK_END_HOUR = 16    # конец смены
 
+
 def _next_work_time(dt: datetime) -> datetime:
     """Сдвигает время на начало следующей рабочей смены если вышли за рамки."""
     if dt.weekday() >= 5:  # суббота/воскресенье

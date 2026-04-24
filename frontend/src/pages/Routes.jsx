@@ -8,19 +8,24 @@ const EMPTY_STEP  = { name: '', worker_type: '', equipment_type: '', duration: 6
 const SKILLS = ['Токарь', 'Фрезеровщик', 'Сверловщик', 'Шлифовщик', 'Слесарь']
 const EQUIP  = ['Токарный', 'Фрезерный', 'Сверлильный', 'Шлифовальный', 'Термическое']
 
-export default function Routes() {
+export default function RoutesPage() {
   const [routes, setRoutes] = useState([])
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState(null)
-  const [form, setForm]   = useState(EMPTY_ROUTE)
+  const [form, setForm] = useState(EMPTY_ROUTE)
   const [detailRoute, setDetailRoute] = useState(null)
 
-  const load = () => routesApi.getAll()
-    .then(r => setRoutes(r.data)).finally(() => setLoading(false))
-  useEffect(load, [])
+  const load = () => {
+    routesApi.getAll()
+      .then(r => setRoutes(r.data))
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
 
   const openCreate = () => { setForm(EMPTY_ROUTE); setModal('form') }
-
   const addStep = () => setForm(f => ({ ...f, steps: [...f.steps, { ...EMPTY_STEP }] }))
   const updateStep = (i, key, val) => setForm(f => ({
     ...f,
@@ -29,16 +34,22 @@ export default function Routes() {
   const removeStep = (i) => setForm(f => ({ ...f, steps: f.steps.filter((_, idx) => idx !== i) }))
 
   const handleSave = async () => {
-    await routesApi.create({ ...form, steps: form.steps.map(s => ({
-      ...s, duration: parseInt(s.duration),
-      equipment_type: s.equipment_type || null,
-    }))})
-    setModal(null); load()
+    await routesApi.create({
+      ...form,
+      steps: form.steps.map(s => ({
+        ...s,
+        duration: parseInt(s.duration),
+        equipment_type: s.equipment_type || null,
+      }))
+    })
+    setModal(null)
+    load()
   }
 
   const handleDelete = async (id) => {
     if (!confirm('Удалить маршрут?')) return
-    await routesApi.delete(id); load()
+    await routesApi.delete(id)
+    load()
   }
 
   return (
@@ -109,7 +120,6 @@ export default function Routes() {
         </div>
       </div>
 
-      {/* Детали маршрута */}
       {detailRoute && (
         <Modal title={detailRoute.name} onClose={() => setDetailRoute(null)} width={560}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -137,13 +147,12 @@ export default function Routes() {
         </Modal>
       )}
 
-      {/* Форма создания */}
       {modal === 'form' && (
         <Modal title="Новый маршрут" onClose={() => setModal(null)} width={580}>
           <div style={{ marginBottom: 16 }}>
             <label style={ui.label}>Наименование маршрута</label>
             <input style={ui.input} placeholder="Токарная → Фрезерная → Шлифовальная"
-              value={form.name} onChange={e => setForm(f => ({...f, name: e.target.value}))} />
+              value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
