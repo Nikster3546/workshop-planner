@@ -5,8 +5,8 @@ from app.schemas.worker import WorkerOut
 from app.schemas.equipment import EquipmentOut
 
 class ScheduleRunRequest(BaseModel):
-    date_from: datetime
-    date_to: datetime
+    date_from: Optional[datetime] = None
+    date_to: Optional[datetime] = None
 
 class ScheduleItemOut(BaseModel):
     id: int
